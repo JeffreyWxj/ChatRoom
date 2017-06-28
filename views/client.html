@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>聊天室</title>
+    <style>
+        .wrapper {
+            width: 60%;
+            margin: auto auto;
+        }
+
+        .title {
+            text-align: center;
+            border: 2px solid black;
+        }
+
+        #msg-box {
+            border: 2px solid black;
+            height: 200px;
+            overflow: hidden;
+            overflow-y: auto;
+        }
+
+        .send-box {
+            border: 2px solid black;
+            overflow: hidden;
+            padding: 5px;
+            margin-top: 15px;
+        }
+
+        #msg {
+            width: 100%;
+            border: none;
+            outline: none;
+        }
+
+        #send {
+            width: 100%;
+            background: none;
+            border: 2px solid black;
+            margin-top: 15px;
+            outline: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <h3 class="title">
+        聊天室
+    </h3>
+    <div id="msg-box">
+
+    </div>
+    <div class="send-box">
+        <input id="msg" autofocus onkeydown="sendMsg();">
+    </div>
+    <div class="send-btn-area">
+        <button id="send" onclick="sendMsg();">发送消息</button>
+    </div>
+</div>
+<script>
+	//初始连接
+	let ws       = new WebSocket("ws://127.0.0.1:3000/");
+	ws.onmessage = function (resp) {
+		console.log(resp);
+		let newMsg       = document.createElement("p");
+		newMsg.innerText = resp.data;
+		let msgBox       = document.getElementById("msg-box");
+		msgBox.appendChild(newMsg);
+	};
+	function sendMsg() {
+		if (event.keyCode && event.keyCode !== 13) {
+			return;
+		}
+		let msgEle = document.getElementById("msg");
+		let msg    = msgEle.value;
+		ws.send(msg);
+		msgEle.value = null;
+	}
+</script>
+</body>
+</html>

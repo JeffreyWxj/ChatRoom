@@ -1,0 +1,7 @@
+{
+	"name": "ChatRoom",
+	"version": "0.0.1",
+	"dependencies": {
+		"ws": "^3.0.0"
+	}
+}
